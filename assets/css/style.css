@@ -1,7 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Trirong:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* GLOBAL VARIABLES FOR COLOR SCHEME */ 
+
+:root{
+  --oxford-blue: rgba(20, 33, 61, 1);
+  --orange-web: rgba(252, 163, 17, 1);
+  --platinum: rgba(229, 229, 229, 1);
+}
+
 /* Box Model Hack */
 * {
   box-sizing: border-box;
-  border: 1px solid red;
 }
 
 /* Clear fix hack */
@@ -22,8 +33,24 @@
 /* BASE STYLES
 /*******************************************/
 
+.header-logo{
+  background-color: black;
+  height: 100%;
+  width: 100vw;
+  text-align: center;
+}
+
+.logo {
+  font-size: 2rem;
+  text-decoration: none;
+  color: white;
+  margin: 1rem auto;
+  display: inline-block;
+}
+
 html {
 	font-size: 62.5%;
+  font-family: 'Comfortaa', 'Helvetica', sans-serif;
 }
 
 body {
