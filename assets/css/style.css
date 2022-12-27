@@ -33,21 +33,6 @@
 /* BASE STYLES
 /*******************************************/
 
-.header-logo{
-  background-color: black;
-  height: 100%;
-  width: 100vw;
-  text-align: center;
-}
-
-.logo {
-  font-size: 2rem;
-  text-decoration: none;
-  color: white;
-  margin: 1rem auto;
-  display: inline-block;
-}
-
 html {
 	font-size: 62.5%;
   font-family: 'Comfortaa', 'Helvetica', sans-serif;
@@ -60,12 +45,18 @@ body {
 /******************************************
 /* LAYOUT
 /*******************************************/
-header {
-
+.header-logo{
+  background-color: var(--oxford-blue);
+  height: 100%;
+  width: 100vw;
+  text-align: center;
 }
 
-footer {
-
+.nav-bar{
+  background-color: var(--oxford-blue);
+  position: absolute;
+  bottom: 0; 
+  width: 100vw; 
 }
 
 /******************************************
@@ -77,3 +68,23 @@ footer {
   margin: 1rem;
   border-radius: 25px;
 }
+
+.logo {
+  font-size: 2rem;
+  text-decoration: none;
+  color: white;
+  margin: 1rem auto;
+  display: inline-block;
+}
+
+.nav-bar > ul{
+  display: flex;
+}
+
+.nav-bar > ul > li{
+  font-size: 2rem;
+  font-family: 'Roboto', Helvetica, sans-serif;
+  color: white;
+  margin: 0 auto;
+}
+
