@@ -33,30 +33,29 @@
 /* BASE STYLES
 /*******************************************/
 
-html {
+html, body {
 	font-size: 62.5%;
   font-family: 'Comfortaa', 'Helvetica', sans-serif;
+  height: 100%;
 }
 
-body {
-
-}
 
 /******************************************
 /* LAYOUT
 /*******************************************/
+
 .header-logo{
   background-color: var(--oxford-blue);
-  height: 100%;
   width: 100vw;
   text-align: center;
 }
 
 .nav-bar{
   background-color: var(--oxford-blue);
-  position: absolute;
-  bottom: 0; 
-  width: 100vw; 
+  position: sticky;
+  top: 100vh;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
 }
 
 /******************************************
@@ -66,7 +65,7 @@ body {
 #map{
   height: 30vh;
   margin: 1rem;
-  border-radius: 25px;
+  border-radius: 1.5rem;
 }
 
 .logo {
@@ -77,14 +76,25 @@ body {
   display: inline-block;
 }
 
+.nav-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  font-family: 'Roboto', Helvetica, sans-serif;
+}
+
+.nav-item > img{
+  color: white;
+}
+
 .nav-bar > ul{
   display: flex;
 }
 
 .nav-bar > ul > li{
-  font-size: 2rem;
-  font-family: 'Roboto', Helvetica, sans-serif;
-  color: white;
-  margin: 0 auto;
+  margin: 0.5rem auto;
 }
 
