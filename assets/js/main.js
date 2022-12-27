@@ -23,6 +23,10 @@ function setupMap(center){
         center: center, // starting position [lng, lat]
         zoom: 12, // starting zoom
         });
+    map.addControl(new mapboxgl.NavigationControl());
+    const userMarker = new mapboxgl.Marker()
+    .setLngLat(center)
+    .addTo(map)
 }
 
 

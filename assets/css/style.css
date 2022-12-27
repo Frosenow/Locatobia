@@ -73,7 +73,7 @@ footer {
 /*******************************************/
 
 #map{
-  height: 200px;
+  height: 30vh;
   margin: 1rem;
   border-radius: 25px;
 }
