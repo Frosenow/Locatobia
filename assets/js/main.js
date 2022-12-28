@@ -1,13 +1,12 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoiZnJvc2Vub3ciLCJhIjoiY2xjNmJyYnI5MDAyMjNucWY0bW9oMzZtYiJ9.QILrch7pIvNYPQjNKRijuw';
-
 // Getting user location
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
-    enableHighAccuracy: true 
+    enableHighAccuracy: true, 
+    timeout: 10000,
 })
 
 // Setting user location on map if success
 function successLocation(position){
-    const center = [position.coords.longitude, position.coords.latitude]
+    const center = [position.coords.latitude, position.coords.longitude]
     setupMap(center)
 }
 
@@ -17,16 +16,13 @@ function errorLocation(){
 }
 
 function setupMap(center){
-    const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v12', // style URL
-        center: center, // starting position [lng, lat]
-        zoom: 12, // starting zoom
-        });
-    map.addControl(new mapboxgl.NavigationControl());
-    const userMarker = new mapboxgl.Marker()
-    .setLngLat(center)
-    .addTo(map)
+    console.log(center)
+    const map = L.map('map').setView(center, 12);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19, 
+    }).addTo(map); 
+    const userMarker = L.marker(center).addTo(map); 
 }
 
 

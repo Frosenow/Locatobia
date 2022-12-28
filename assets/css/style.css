@@ -82,9 +82,11 @@ html, body {
   align-items: center;
   color: white;
   text-decoration: none;
-  font-size: 2rem;
+  padding: 0.2rem 0;
+  font-size: 1.6rem;
   font-family: 'Roboto', Helvetica, sans-serif;
 }
+
 
 .nav-item > img{
   color: white;
@@ -97,4 +99,5 @@ html, body {
 .nav-bar > ul > li{
   margin: 0.5rem auto;
 }
+
 
