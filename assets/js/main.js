@@ -1,9 +1,5 @@
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY; 
-const my_script = document.createElement('script');
-my_script.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&libraries=places`);
-document.body.appendChild(my_script);
-
 
 // Getting user location
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
@@ -13,45 +9,45 @@ navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
 
 // Setting user location on map if success
 function successLocation(position){ 
-    const center = [position.coords.latitude, position.coords.longitude]
-    setupMap(center)
-    getPOI(position)
-
+    const userPosition = [position.coords.latitude, position.coords.longitude]
+    initMap({lat: userPosition[0], lng: userPosition[1]})
+    const LatLng = `${userPosition[0]},${userPosition[1]}`
+    getPOI(LatLng, 1000)
 }
 
 // Setting default location (Tucson, Arizona) on map if error 
 function errorLocation(){
-    setupMap([-110.911789,32.253460])
+    initMap([-110.911789,32.253460])
 }
 
 // Generating map image and adding marker with user current location
-function setupMap(center){
-    const map = L.map('map').setView(center, 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19, 
-    }).addTo(map); 
-    const userMarker = L.marker(center).addTo(map); 
+function initMap(userPosition){
+    const mapDiv = document.getElementById("map")
+    const map = new google.maps.Map(mapDiv, {
+        zoom: 12, 
+        center: userPosition,   
+    })
+
+    const marker = new google.maps.Marker({
+        position: userPosition,
+        map: map, 
+    })
 }
 
 // Getting list of places within given location and radius 
-function getPOI(position){
-    const location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    const request = {
-        location: location,
-        radius: '5000',
-    };
+async function getPOI(position, radius){
 
-    service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, callback);
-}
-
-// Displaying gathered list of places 
-function callback(results, status){
-    if(status == google.maps.places.PlacesServiceStatus.OK){
-        for(let i = 0; i < results.length; i++)
-            console.log(results[i])
-    }
+        const URL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${placesAPIKey}&location=${position}&radius=${radius}`;
+        const res = await fetch(URL, {
+            method: 'get',
+            headers: {},
+        })
+        if(res.ok){
+            const resJson = await res.json()
+            console.log(...resJson.results)
+        }else{
+            console.log("FETCH: ERROR")
+        }
 }
 
 
