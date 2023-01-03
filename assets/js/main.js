@@ -11,8 +11,7 @@ navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
 function successLocation(position){ 
     const userPosition = [position.coords.latitude, position.coords.longitude]
     initMap({lat: userPosition[0], lng: userPosition[1]})
-    const LatLng = `${userPosition[0]},${userPosition[1]}`
-    getPOI(LatLng, 1000)
+    getPOI(userPosition, 1000)
 }
 
 // Setting default location (Tucson, Arizona) on map if error 
@@ -36,18 +35,21 @@ function initMap(userPosition){
 
 // Getting list of places within given location and radius 
 async function getPOI(position, radius){
+    service = new google.maps.places.PlacesService(document.createElement('div'));
+    coordinatesObj = new google.maps.LatLng(position[0],position[1])
 
-        const URL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${placesAPIKey}&location=${position}&radius=${radius}`;
-        const res = await fetch(URL, {
-            method: 'get',
-            headers: {},
-        })
-        if(res.ok){
-            const resJson = await res.json()
-            console.log(...resJson.results)
-        }else{
-            console.log("FETCH: ERROR")
-        }
+    service.nearbySearch({
+        location: coordinatesObj,
+        radius: radius, 
+    }, callback)
 }
 
+function callback(results, status){
+    if(status == google.maps.places.PlacesServiceStatus.OK){
+        for(let i = 0; i < results.length; i++)
+            console.log(results[i])
+    }else{
+        console.log("ERROR CALLBACK PLACES API")
+    }
+}
 
