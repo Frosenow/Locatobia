@@ -1,5 +1,10 @@
 // Setting up hidden API key
-const placesAPIKey = config.API_KEY; 
+const placesAPIKey = config.API_KEY;
+
+// Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
+const scriptAPI = document.createElement('script')
+scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=initMap`)
+document.body.appendChild(scriptAPI)
 
 // Getting user location
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
@@ -23,7 +28,7 @@ function errorLocation(){
 function initMap(userPosition){
     const mapDiv = document.getElementById("map")
     const map = new google.maps.Map(mapDiv, {
-        zoom: 12, 
+        zoom: 15, 
         center: userPosition,   
     })
 
@@ -46,10 +51,9 @@ async function getPOI(position, radius){
 
 function callback(results, status){
     if(status == google.maps.places.PlacesServiceStatus.OK){
-        for(let i = 0; i < results.length; i++)
-            console.log(results[i])
+        results.forEach(result => console.log(result))
     }else{
-        console.log("ERROR CALLBACK PLACES API")
+        console.log("PlaceService Error")
     }
 }
 
