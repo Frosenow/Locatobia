@@ -156,3 +156,19 @@ html, body {
  .container .group{
   margin: 0 auto;
  }
+
+#places-names {
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start
+}
+
+ #places-names > li{
+  font-size: 1.5rem;
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  line-height: 1.5rem;
+  padding-top: 1rem;
+  border-bottom: 1px solid black;
+  text-align: left;
+ }
