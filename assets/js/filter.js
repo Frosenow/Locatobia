@@ -1,9 +1,8 @@
 
 const places = JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))
-console.log(places)
 
 
-// This function scrap all categories of places nearby and format them  
+// Scrap all categories of places nearby and format them  
 function defineCategories(){
     const categories = []; 
     places.forEach(place => {
@@ -17,6 +16,7 @@ function defineCategories(){
     return categories
 }
 
+// Create categories headers and html elements to render it on page dynamically
 function createHeaders(categories){
     const ulElement = document.getElementById('places-names')
     categories.forEach(category => {
@@ -24,7 +24,16 @@ function createHeaders(categories){
         ulHeaderElement.setAttribute('id', String(category))
         ulHeaderElement.innerText = String(category)
         ulElement.appendChild(ulHeaderElement)
+        appendPlaces(places, category)
     })
+}
+
+function appendPlaces(places, category){
+    // Return list of all places that fits into category passed as argument
+    return places.filter(place => place
+        .types
+        .includes(String(category)
+        .toLowerCase()))
 }
 
 const items = defineCategories()
