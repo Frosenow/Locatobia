@@ -1,5 +1,10 @@
 // Setting up hidden API key
-const placesAPIKey = config.API_KEY; 
+const placesAPIKey = config.API_KEY;
+
+// Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
+const scriptAPI = document.createElement('script')
+scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=initMap`)
+document.body.appendChild(scriptAPI)
 
 // Getting user location
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
@@ -11,8 +16,7 @@ navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
 function successLocation(position){ 
     const userPosition = [position.coords.latitude, position.coords.longitude]
     initMap({lat: userPosition[0], lng: userPosition[1]})
-    const LatLng = `${userPosition[0]},${userPosition[1]}`
-    getPOI(LatLng, 1000)
+    getPOI(userPosition, 1000)
 }
 
 // Setting default location (Tucson, Arizona) on map if error 
@@ -24,7 +28,7 @@ function errorLocation(){
 function initMap(userPosition){
     const mapDiv = document.getElementById("map")
     const map = new google.maps.Map(mapDiv, {
-        zoom: 12, 
+        zoom: 15, 
         center: userPosition,   
     })
 
@@ -36,18 +40,19 @@ function initMap(userPosition){
 
 // Getting list of places within given location and radius 
 async function getPOI(position, radius){
+    service = new google.maps.places.PlacesService(document.createElement('div'));
+    coordinatesObj = new google.maps.LatLng(position[0],position[1])
 
-        const URL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${placesAPIKey}&location=${position}&radius=${radius}`;
-        const res = await fetch(URL, {
-            method: 'get',
-            headers: {},
-        })
-        if(res.ok){
-            const resJson = await res.json()
-            console.log(...resJson.results)
-        }else{
-            console.log("FETCH: ERROR")
-        }
+    service.nearbySearch({
+        location: coordinatesObj,
+        radius: radius, 
+    }, callback)
 }
 
-
+function callback(results, status){
+    if(status == google.maps.places.PlacesServiceStatus.OK){
+        results.forEach(result => console.log(result))
+    }else{
+        console.log("PlaceService Error")
+    }
+}
