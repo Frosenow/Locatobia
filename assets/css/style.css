@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Trirong:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 /* GLOBAL VARIABLES FOR COLOR SCHEME */ 
 
 :root{
@@ -13,6 +13,7 @@
 /* Box Model Hack */
 * {
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Clear fix hack */
@@ -100,4 +101,21 @@ html, body {
   margin: 0.5rem auto;
 }
 
+#searchbar{
+  margin-top: 5%;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 2%;
+  padding: 15px;
+  border-radius: 10px;
+}
 
+input[type=text] {
+  width: 30%;
+  -webkit-transition: width 0.15s ease-in-out;
+  transition: width 0.15s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 70%;
+}
