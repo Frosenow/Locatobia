@@ -25,14 +25,16 @@ function createHeaders(categories){
         ulHeaderElement.setAttribute('class', 'category-header')
         ulHeaderElement.innerText = String(category)
         ulElement.appendChild(ulHeaderElement)
+
         // Create  dropdown ul for storing places 
         ulDropdown = document.createElement('ul')
         ulDropdown.setAttribute('class', `dropdown ${category}`)
         ulHeaderElement.appendChild(ulDropdown)
 
+        // appendPlaces(places, category)
+
         // Add all li's places to dropdown ul 
         const placesArr = appendPlaces(places, category)
-        console.log(placesArr, category)
         placesArr.forEach(place => {
             liPlace = document.createElement('li') 
             liPlace.innerText = place.name
@@ -43,11 +45,15 @@ function createHeaders(categories){
 
 function appendPlaces(places, category){
     // Return list of all places that fits into category passed as argument
+    const categoryFormat = category
+    .split(' ')
+    .join('_')
+    .toLowerCase()
+    
     return places.filter(place => place
         .types
-        .includes(String(category)
-        .toLowerCase()))
+        .includes(categoryFormat))
 }
 
-const items = defineCategories()
-createHeaders(items)
+const categories = defineCategories()
+createHeaders(categories)
