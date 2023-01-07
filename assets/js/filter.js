@@ -7,7 +7,7 @@ function defineCategories(){
     const categories = []; 
     places.forEach(place => {
         place.types.forEach(type => {
-            let typeName = type.toUpperCase().split('_').join(' ')
+            const typeName = type.toUpperCase().split('_').join(' ')
             if(!categories.includes(typeName)){
                 categories.push(typeName)
             }
@@ -20,11 +20,24 @@ function defineCategories(){
 function createHeaders(categories){
     const ulElement = document.getElementById('places-names')
     categories.forEach(category => {
+        // Create main ul with category title 
         ulHeaderElement = document.createElement('li')
-        ulHeaderElement.setAttribute('id', String(category))
+        ulHeaderElement.setAttribute('class', 'category-header')
         ulHeaderElement.innerText = String(category)
         ulElement.appendChild(ulHeaderElement)
-        appendPlaces(places, category)
+        // Create  dropdown ul for storing places 
+        ulDropdown = document.createElement('ul')
+        ulDropdown.setAttribute('class', `dropdown ${category}`)
+        ulHeaderElement.appendChild(ulDropdown)
+
+        // Add all li's places to dropdown ul 
+        const placesArr = appendPlaces(places, category)
+        console.log(placesArr, category)
+        placesArr.forEach(place => {
+            liPlace = document.createElement('li') 
+            liPlace.innerText = place.name
+            ulDropdown.appendChild(liPlace)
+        })
     })
 }
 
