@@ -23,8 +23,11 @@ function createHeaders(categories){
         // Create main ul with category title 
         ulHeaderElement = document.createElement('li')
         ulHeaderElement.setAttribute('class', 'category-header')
-        ulHeaderElement.innerText = String(category)
+        ulSpanCategory = document.createElement('span')
+        ulSpanCategory.setAttribute('id', 'category-name')
+        ulSpanCategory.innerText = String(category)
         ulElement.appendChild(ulHeaderElement)
+        ulHeaderElement.appendChild(ulSpanCategory)
 
         // Create  dropdown ul for storing places 
         ulDropdown = document.createElement('ul')
