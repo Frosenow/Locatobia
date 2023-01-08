@@ -1,3 +1,5 @@
+// TO AVOID "UNCAUGHT REFERENCE ERROR" API SCRIPT SHOULD BE LOADED BEFEROE MAIN JS SCRIPT (!)
+//THIS METHOD IS TEMPORARY, TO PROTECT API KEY 
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
@@ -16,7 +18,7 @@ navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
 function successLocation(position){ 
     const userPosition = [position.coords.latitude, position.coords.longitude]
     initMap({lat: userPosition[0], lng: userPosition[1]})
-    getPOI(userPosition, 1000)
+    getPOI(userPosition, 10000)
 }
 
 // Setting default location (Tucson, Arizona) on map if error 
@@ -40,20 +42,25 @@ function initMap(userPosition){
 
 // Getting list of places within given location and radius 
 async function getPOI(position, radius){
-    service = new google.maps.places.PlacesService(document.createElement('div'));
-    coordinatesObj = new google.maps.LatLng(position[0],position[1])
-
-    service.nearbySearch({
-        location: coordinatesObj,
-        radius: radius, 
-    }, callback)
+        service = new google.maps.places.PlacesService(document.createElement('div'));
+        coordinatesObj = new google.maps.LatLng(position[0],position[1])
+        service.nearbySearch({
+            location: coordinatesObj,
+            radius: radius,
+        }, callback)
 }
 
-function callback(results, status){
+function callback(results, status, next_page_token){
+    
+    window.sessionStorage.setItem('nearbyPlaces', JSON.stringify(results)) 
     if(status == google.maps.places.PlacesServiceStatus.OK){
         results.forEach(result => console.log(result))
     }else{
         console.log("PlaceService Error")
     }
+    if(next_page_token.hasNextPage){
+        // const pageToken = next_page_token.C
+        // scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=initMap&pagetoken=${pageToken}`) 
+        // console.log(pageToken)
+    }
 }
-
