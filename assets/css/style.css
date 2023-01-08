@@ -82,6 +82,7 @@ html, body {
 #map{
   height: 30vh;
   border-radius: 1.5rem;
+  margin: 1rem 2rem;
 }
 
 .logo {
