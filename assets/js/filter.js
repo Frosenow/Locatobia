@@ -19,13 +19,16 @@ function defineCategories(){
 // Create categories headers and html elements to render it on page dynamically
 function createHeaders(categories){
     const ulElement = document.getElementById('places-names')
+
     categories.forEach(category => {
         // Create main ul with category title 
         ulHeaderElement = document.createElement('li')
         ulHeaderElement.setAttribute('class', 'category-header')
+        
         ulSpanCategory = document.createElement('span')
         ulSpanCategory.setAttribute('id', 'category-name')
         ulSpanCategory.innerText = String(category)
+       
         ulElement.appendChild(ulHeaderElement)
         ulHeaderElement.appendChild(ulSpanCategory)
 
@@ -34,13 +37,27 @@ function createHeaders(categories){
         ulDropdown.setAttribute('class', `dropdown ${category}`)
         ulHeaderElement.appendChild(ulDropdown)
 
-        // appendPlaces(places, category)
-
         // Add all li's places to dropdown ul 
         const placesArr = appendPlaces(places, category)
+
         placesArr.forEach(place => {
-            liPlace = document.createElement('li') 
-            liPlace.innerText = place.name
+            // Create Like icon 
+            aTag = document.createElement('a')
+            aTag.setAttribute('href', '#/')
+            aTag.setAttribute('class', 'like-btn')
+            aTag.innerHTML = '<i class="fa-regular fa-bookmark"></i>'
+
+            // Create lis with places 
+            liPlace = document.createElement('li')
+            
+            // Append aTag with icon and span with place name
+            liPlace.appendChild(aTag)
+
+            liSpan = document.createElement('span')
+            liSpan.innerText = place.name
+            liPlace.appendChild(liSpan)
+            liPlace.setAttribute('class', 'place-name')
+            // Append whole section to ul with category
             ulDropdown.appendChild(liPlace)
         })
     })
@@ -83,4 +100,16 @@ function filterNames(){
             li.style.display = 'none';
         }
     })
+}
+
+likeBtns = document.querySelectorAll('.like-btn')
+
+likeBtns.forEach(btn => btn.addEventListener('click', saveLocation))
+
+function saveLocation(target){
+    if(target.currentTarget.getElementsByTagName('i')[0].className === 'fa-solid fa-bookmark'){
+        target.currentTarget.getElementsByTagName('i')[0].className = 'fa-regular fa-bookmark'
+    } else {
+        target.currentTarget.getElementsByTagName('i')[0].className = 'fa-solid fa-bookmark'
+    } 
 }
