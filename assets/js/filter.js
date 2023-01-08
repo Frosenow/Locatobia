@@ -57,3 +57,27 @@ function appendPlaces(places, category){
 
 const categories = defineCategories()
 createHeaders(categories)
+
+// Get input element 
+const filterInput = document.getElementById('filter-input')
+
+// Add event listener 
+filterInput.addEventListener('keyup', filterNames)
+
+function filterNames(){
+    // Get value of input 
+    const filterValue = filterInput.value.toUpperCase() 
+    
+    //Get all lis with places in category 
+    const liNames = document.querySelectorAll('.dropdown li')
+
+    // Lopp through collection-item lis 
+    liNames.forEach(li => {
+        //If matched 
+        if(li.innerHTML.toUpperCase().indexOf(filterValue) > -1){
+            li.style.display = '';
+        } else {
+            li.style.display = 'none';
+        }
+    })
+}
