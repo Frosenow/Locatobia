@@ -46,7 +46,7 @@ function createHeaders(categories){
             aTag.setAttribute('href', '#/')
             aTag.setAttribute('class', 'like-btn')
             aTag.innerHTML = '<i class="fa-regular fa-bookmark"></i>'
-
+            aTag.id = place.place_id
             // Create lis with places 
             liPlace = document.createElement('li')
             
@@ -109,7 +109,34 @@ likeBtns.forEach(btn => btn.addEventListener('click', saveLocation))
 function saveLocation(target){
     if(target.currentTarget.getElementsByTagName('i')[0].className === 'fa-solid fa-bookmark'){
         target.currentTarget.getElementsByTagName('i')[0].className = 'fa-regular fa-bookmark'
+        removeFromFavourites(target)
     } else {
         target.currentTarget.getElementsByTagName('i')[0].className = 'fa-solid fa-bookmark'
+        addToFavourites(target) 
     } 
+}
+
+function addToFavourites(target){
+    // Get ID of place 
+    places_id = target.currentTarget.id
+
+    // Find that place by ID and add to LocalStorage
+    places.forEach(place => {
+        if(place["place_id"] == places_id){
+            window.localStorage.setItem(place.name, JSON.stringify(place))
+        }
+            
+    })
+}
+
+function removeFromFavourites(target){
+    // Get ID of place
+    places_id = target.currentTarget.id 
+    // Find that place by ID and remove from LocalStorage
+    places.forEach(place => {
+        if(place["place_id"] == places_id){
+            window.localStorage.removeItem(place.name)
+        }
+            
+    })
 }
