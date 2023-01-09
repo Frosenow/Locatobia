@@ -1,7 +1,6 @@
 
 const places = JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))
 
-
 // Scrap all categories of places nearby and format them  
 function defineCategories(){
     const categories = []; 
@@ -14,6 +13,16 @@ function defineCategories(){
         })
     })
     return categories
+}
+
+function getDataBaseStatus(){
+    let placesStatus = []; 
+    if(window.localStorage.key('favPlaces')){
+        placesStatus = [...JSON.parse(window.localStorage.getItem('favPlaces'))]
+        return placesStatus
+    } else {
+        return placesStatus
+    }
 }
 
 // Create categories headers and html elements to render it on page dynamically
@@ -117,26 +126,33 @@ function saveLocation(target){
 }
 
 function addToFavourites(target){
+    // Get current items from "database"
+    let placesStatus = getDataBaseStatus()
+
     // Get ID of place 
     places_id = target.currentTarget.id
 
-    // Find that place by ID and add to LocalStorage
-    places.forEach(place => {
-        if(place["place_id"] == places_id){
-            window.localStorage.setItem(place.name, JSON.stringify(place))
+    // Find that place by ID and add to LocalStorage if it isn't already 
+   places.forEach(place => {
+        if(place["place_id"] == places_id && placesStatus.every(elem => elem.place_id != places_id)){
+            placesStatus.push(place)
+            console.log(placesStatus, 'po dodaniu')
+            localStorage.setItem(`favPlaces`, JSON.stringify(placesStatus))
+            // // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
+            // // location.reload()
         }
-            
     })
 }
 
 function removeFromFavourites(target){
+    let placesStatus = getDataBaseStatus()
     // Get ID of place
     places_id = target.currentTarget.id 
     // Find that place by ID and remove from LocalStorage
     places.forEach(place => {
         if(place["place_id"] == places_id){
-            window.localStorage.removeItem(place.name)
-        }
-            
+            const baseUpdate = placesStatus.filter(placeInDB => placeInDB.place_id != places_id)
+            window.localStorage.setItem('favPlaces', JSON.stringify(baseUpdate))
+        }  
     })
 }
