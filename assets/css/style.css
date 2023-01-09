@@ -288,6 +288,7 @@ input[type=text]:focus {
 
 .heading {
   color: rgb(255, 255, 255);
+  text-align: justify;
   padding: 7px;
   line-height: 1.5;
   font-size: .8rem;
@@ -303,3 +304,6 @@ input[type=text]:focus {
   font-size: 2rem;
 }
 
+.card:last-child{
+  margin-bottom: 7rem;
+}
