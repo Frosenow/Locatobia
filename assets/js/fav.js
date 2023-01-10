@@ -26,27 +26,41 @@ async function getPlacesDetails() {
       placesDetails.push(placeDetail);
     }
   
-    console.log(placesDetails);
-    await attachPlaces(favPlaces);
+    await attachPlaces(favPlaces, placesDetails);
   }
 
 const favPlaces = JSON.parse(window.localStorage.getItem('favPlaces'))
 
 
-function attachPlaces(databaseContent){
+function attachPlaces(databaseContent, placesDetails){
     const cardHolder = document.querySelector('.card-holder')
     databaseContent.forEach(async element => {
         const card = document.querySelector('template')
         .content
         .cloneNode(true)
 
-        let cardElement = await setInformations(card, element)
+        let cardElement = await setInformations(card, element, placesDetails)
         cardHolder.appendChild(cardElement)
     })
 }
 
-function setInformations(cardNode, placeElement){
+function setInformations(cardNode, placeElement, placesDetails){
     cardNode.querySelector('.category').innerText = placeElement.name 
+    placesDetails.forEach(detail => {
+      if(detail.place_id === placeElement.place_id){
+        console.log(detail)
+        if(detail.adr_address){
+          cardNode.querySelector('.heading').innerHTML = detail.adr_address
+        }
+        if(detail.formatted_phone_number){
+          cardNode.querySelector('.phone-num').innerText = detail.formatted_phone_number
+        } 
+        if(detail.rating){
+          cardNode.querySelector('.rating').innerText = `Rating: ${detail.rating}`
+        }
+
+      }
+    })
     return cardNode
 }
 

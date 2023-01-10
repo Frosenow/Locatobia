@@ -286,7 +286,7 @@ input[type=text]:focus {
   cursor: pointer;
 }
 
-.heading {
+.heading, .phone-num {
   color: rgb(255, 255, 255);
   text-align: justify;
   padding: 7px;
@@ -306,4 +306,9 @@ input[type=text]:focus {
 
 .card:last-child{
   margin-bottom: 7rem;
+}
+
+.rating, .phone-num{
+  color: white; 
+  font-size: 1rem;
 }
