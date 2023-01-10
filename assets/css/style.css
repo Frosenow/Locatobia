@@ -308,7 +308,14 @@ input[type=text]:focus {
   margin-bottom: 7rem;
 }
 
+.main-info{
+  display: flex; 
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
 .rating, .phone-num{
   color: white; 
   font-size: 1rem;
+  padding: 0;
 }

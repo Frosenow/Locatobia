@@ -45,20 +45,18 @@ function attachPlaces(databaseContent, placesDetails){
 }
 
 function setInformations(cardNode, placeElement, placesDetails){
-    cardNode.querySelector('.category').innerText = placeElement.name 
+    cardNode.querySelector('.name').innerText = placeElement.name 
     placesDetails.forEach(detail => {
       if(detail.place_id === placeElement.place_id){
-        console.log(detail)
         if(detail.adr_address){
           cardNode.querySelector('.heading').innerHTML = detail.adr_address
         }
         if(detail.formatted_phone_number){
-          cardNode.querySelector('.phone-num').innerText = detail.formatted_phone_number
+          cardNode.querySelector('.phone-num').innerText = `tel. ${detail.formatted_phone_number}`
         } 
         if(detail.rating){
           cardNode.querySelector('.rating').innerText = `Rating: ${detail.rating}`
         }
-
       }
     })
     return cardNode
