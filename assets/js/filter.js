@@ -1,5 +1,6 @@
 
 const places = JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))
+const favPlaces = JSON.parse(window.localStorage.getItem('favPlaces'))
 
 // Scrap all categories of places nearby and format them  
 function defineCategories(){
@@ -50,11 +51,20 @@ function createHeaders(categories){
         const placesArr = appendPlaces(places, category)
 
         placesArr.forEach(place => {
+
             // Create Like icon 
             aTag = document.createElement('a')
             aTag.setAttribute('href', '#/')
             aTag.setAttribute('class', 'like-btn')
-            aTag.innerHTML = '<i class="fa-regular fa-bookmark"></i>'
+
+             // Check if palce is in data base, and if true, change icon 
+            let iconType = 'fa-regular';
+            console.log(favPlaces)
+            // if(place){
+            //     iconType = 'fa-bold'
+            // }
+
+            aTag.innerHTML = `<i class="${iconType} fa-bookmark"></i>`
             aTag.id = place.place_id
             // Create lis with places 
             liPlace = document.createElement('li')
