@@ -31,6 +31,11 @@ async function getPlacesDetails() {
 
 const favPlaces = JSON.parse(window.localStorage.getItem('favPlaces'))
 
+// Display info if there is no data in database 
+if(favPlaces.length > 0){
+  document.querySelector('.user-info').style.display = 'none';
+}
+
 
 function attachPlaces(databaseContent, placesDetails){
     const cardHolder = document.querySelector('.card-holder')

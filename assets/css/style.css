@@ -319,3 +319,23 @@ input[type=text]:focus {
   font-size: 1rem;
   padding: 0;
 }
+
+/* NO DATA IN DB INFO CARD */
+.user-info{
+  display: block;
+  width: 90%;
+  font-size: 4rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  line-height: 1.5;
+}
+
+.user-info > *{
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info > h1 > span{
+  font-size: 2.5rem;
+}
