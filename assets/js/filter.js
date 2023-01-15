@@ -59,11 +59,9 @@ function createHeaders(categories){
 
              // Check if palce is in data base, and if true, change icon 
             let iconType = 'fa-regular';
-            console.log(favPlaces)
-            // if(place){
-            //     iconType = 'fa-bold'
-            // }
-
+            if(!isInDatabase(favPlaces, place)){
+                iconType = 'fa-solid'
+            }
             aTag.innerHTML = `<i class="${iconType} fa-bookmark"></i>`
             aTag.id = place.place_id
             // Create lis with places 
@@ -110,7 +108,7 @@ function filterNames(){
     //Get all lis with places in category 
     const liNames = document.querySelectorAll('.dropdown li')
 
-    // Lopp through collection-item lis 
+    // Loop through collection-item lis 
     liNames.forEach(li => {
         //If matched 
         if(li.innerHTML.toUpperCase().indexOf(filterValue) > -1){
@@ -148,8 +146,8 @@ function addToFavourites(target){
             placesStatus.push(place)
             console.log(placesStatus, 'po dodaniu')
             localStorage.setItem(`favPlaces`, JSON.stringify(placesStatus))
-            // // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
-            // // location.reload()
+            // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
+            location.reload()
         }
     })
 }
@@ -165,4 +163,10 @@ function removeFromFavourites(target){
             window.localStorage.setItem('favPlaces', JSON.stringify(baseUpdate))
         }  
     })
+    location.reload()
+}
+
+
+function isInDatabase(Database, elem){
+    return Database.every(item => item.place_id !== elem.place_id)
 }
