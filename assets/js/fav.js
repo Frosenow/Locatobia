@@ -53,6 +53,11 @@ function setInformations(cardNode, placeElement, placesDetails){
     cardNode.querySelector('.name').innerText = placeElement.name 
     placesDetails.forEach(detail => {
       if(detail.place_id === placeElement.place_id){
+        if(detail.photos){
+          cardNode.querySelector('.source-image').src = detail.photos[0].getUrl()
+        } else {
+          cardNode.querySelector('.source-image').src = "assets/images/image_not_found.jpg"
+        }
         if(detail.adr_address){
           cardNode.querySelector('.heading').innerHTML = detail.adr_address
         }
