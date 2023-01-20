@@ -76,7 +76,7 @@ body {overflow-x: hidden;}
  }
 
  .icon-active{
-  filter: drop-shadow(0 2px 8px var(--orange-web));
+  filter: drop-shadow(0 2px 8px rgb(99, 132, 203));
  }
 /******************************************
 /* ADDITIONAL STYLES
