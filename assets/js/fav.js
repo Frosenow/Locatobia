@@ -1,3 +1,5 @@
+
+
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
@@ -6,6 +8,7 @@ const scriptAPI = document.createElement('script')
 scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&callback=getPlacesDetails&libraries=places&v=weekly`)
 document.head.appendChild(scriptAPI)
 
+// Getting details of saved places by its ID 
 async function getPlacesDetails() {
     const placesDetails = [];
     service = new google.maps.places.PlacesService(document.createElement('div'));
@@ -36,7 +39,7 @@ if(favPlaces.length > 0){
   document.querySelector('.user-info').style.display = 'none';
 }
 
-
+// Attaching card with favurite place to DOM and setting information 
 function attachPlaces(databaseContent, placesDetails){
     const cardHolder = document.querySelector('.card-holder')
     databaseContent.forEach(async element => {
@@ -49,6 +52,8 @@ function attachPlaces(databaseContent, placesDetails){
     })
 }
 
+
+// Set all information to card with saved place
 function setInformations(cardNode, placeElement, placesDetails){
     cardNode.querySelector('.name').innerText = placeElement.name 
     placesDetails.forEach(detail => {
@@ -67,9 +72,45 @@ function setInformations(cardNode, placeElement, placesDetails){
         if(detail.rating){
           cardNode.querySelector('.rating').innerText = `Rating: ${detail.rating}`
         }
+
+        cardNode.querySelector('.delete-icon').setAttribute('delete_id', `${detail.place_id}`)
       }
     })
+
+    // Add EvenetListener for every card to delet it from database if clicked 
+    cardNode.querySelector('.delete-icon').addEventListener('click', removeFromFav)
     return cardNode
 }
 
+// Remove item from database if icon was clicked
+function removeFromFav(target){
+  // Get current database status 
+  let placesStatus = getDataBaseStatus()
+  // Get ID of element which should be deleted from database 
+  const IdToDelete = target.currentTarget.getAttribute('delete_id')
+  removeFromFavourites(IdToDelete)
+}
 
+function getDataBaseStatus(){
+  let placesStatus = []; 
+  if(window.localStorage.key('favPlaces')){
+      placesStatus = [...JSON.parse(window.localStorage.getItem('favPlaces'))]
+      return placesStatus
+  } else {
+      return placesStatus
+  }
+}
+
+function removeFromFavourites(target){
+  const placesStatus = getDataBaseStatus()
+  // Get ID of place
+  const places_id = target
+  // Find that place by ID and remove from LocalStorage
+  placesStatus.forEach(place => {
+      if(place["place_id"] == places_id){
+          const baseUpdate = placesStatus.filter(placeInDB => placeInDB.place_id != places_id)
+          window.localStorage.setItem('favPlaces', JSON.stringify(baseUpdate))
+      }  
+  })
+  location.reload()
+}

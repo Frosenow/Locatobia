@@ -32,10 +32,10 @@ function createHeaders(categories){
 
     categories.forEach(category => {
         // Create main ul with category title 
-        ulHeaderElement = document.createElement('li')
+        const ulHeaderElement = document.createElement('li')
         ulHeaderElement.setAttribute('class', 'category-header')
         
-        ulSpanCategory = document.createElement('span')
+        const ulSpanCategory = document.createElement('span')
         ulSpanCategory.setAttribute('id', 'category-name')
         ulSpanCategory.innerText = String(category)
        
@@ -43,7 +43,7 @@ function createHeaders(categories){
         ulHeaderElement.appendChild(ulSpanCategory)
 
         // Create  dropdown ul for storing places 
-        ulDropdown = document.createElement('ul')
+        let ulDropdown = document.createElement('ul')
         ulDropdown.setAttribute('class', `dropdown ${category}`)
         ulHeaderElement.appendChild(ulDropdown)
 
@@ -53,7 +53,7 @@ function createHeaders(categories){
         placesArr.forEach(place => {
 
             // Create Like icon 
-            aTag = document.createElement('a')
+            const aTag = document.createElement('a')
             aTag.setAttribute('href', '#/')
             aTag.setAttribute('class', 'like-btn')
 
@@ -65,12 +65,12 @@ function createHeaders(categories){
             aTag.innerHTML = `<i class="${iconType} fa-bookmark"></i>`
             aTag.id = place.place_id
             // Create lis with places 
-            liPlace = document.createElement('li')
+            const liPlace = document.createElement('li')
             
             // Append aTag with icon and span with place name
             liPlace.appendChild(aTag)
 
-            liSpan = document.createElement('span')
+            const liSpan = document.createElement('span')
             liSpan.innerText = place.name
             liPlace.appendChild(liSpan)
             liPlace.setAttribute('class', 'place-name')
@@ -119,7 +119,7 @@ function filterNames(){
     })
 }
 
-likeBtns = document.querySelectorAll('.like-btn')
+const likeBtns = document.querySelectorAll('.like-btn')
 
 likeBtns.forEach(btn => btn.addEventListener('click', saveLocation))
 
@@ -135,16 +135,15 @@ function saveLocation(target){
 
 function addToFavourites(target){
     // Get current items from "database"
-    let placesStatus = getDataBaseStatus()
+    const placesStatus = getDataBaseStatus()
 
     // Get ID of place 
-    places_id = target.currentTarget.id
+    const places_id = target.currentTarget.id
 
     // Find that place by ID and add to LocalStorage if it isn't already 
    places.forEach(place => {
         if(place["place_id"] == places_id && placesStatus.every(elem => elem.place_id != places_id)){
             placesStatus.push(place)
-            console.log(placesStatus, 'po dodaniu')
             localStorage.setItem(`favPlaces`, JSON.stringify(placesStatus))
             // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
             location.reload()
@@ -153,9 +152,9 @@ function addToFavourites(target){
 }
 
 function removeFromFavourites(target){
-    let placesStatus = getDataBaseStatus()
+    const placesStatus = getDataBaseStatus()
     // Get ID of place
-    places_id = target.currentTarget.id 
+    const places_id = target.currentTarget.id 
     // Find that place by ID and remove from LocalStorage
     places.forEach(place => {
         if(place["place_id"] == places_id){
