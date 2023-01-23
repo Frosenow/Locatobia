@@ -44,6 +44,7 @@ html, body {
   height: 100%;
 }
 
+body {overflow-x: hidden;}
 
 /******************************************
 /* LAYOUT
@@ -73,11 +74,13 @@ html, body {
 .container{
   padding: 1rem 2rem;
   height: 100%;
-  height: calc(100% - 94px);
   display: block;
   margin: 0 auto;
  }
 
+ .icon-active{
+  filter: drop-shadow(0 2px 8px rgb(99, 132, 203));
+ }
 /******************************************
 /* ADDITIONAL STYLES
 /*******************************************/
@@ -240,6 +243,7 @@ input[type=text]:focus {
   background: rgba(170, 170, 170, 0.062);
   transition: 0.5s;
 }
+
 
 /* RANGE SLIDER  */
 
@@ -437,4 +441,114 @@ body{
 
 .button button:hover{
   background: #0d0c22;
+=======
+/* FAVOURITES CARD DESIGN */
+
+.card {
+  width: 80%; 
+  height: 100%; 
+  background: var(--oxford-blue);
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  margin: 1.2rem auto;
+  position: relative;
+}
+
+.card-image, .source-image {
+  background-color: rgb(236, 236, 236);
+  width: 10rem;
+  height: 10rem;
+  border-radius: 6px 6px 0 0;
+  min-width: 10rem;
+}
+
+.text-content{
+  display: flex;
+}
+
+.fa-trash{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: .75rem;
+}
+
+.card-image:hover{
+  transform: scale(0.98);
+}
+
+.fa-trash:hover {
+  transform: scale(1.1);
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-family: 'Comfortaa', 'Helvetica', sans-serif;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  padding: 10px 7px 0;
+}
+
+.category:hover {
+  cursor: pointer;
+}
+
+.heading, .phone-num {
+  color: rgb(255, 255, 255);
+  text-align: justify;
+  padding: 7px;
+  line-height: 1.5;
+  font-size: .8rem;
+  font-family: 'Poppins', 'Helvetica', sans-serif;
+}
+
+.heading:hover, .fa-trash:hover {
+  cursor: pointer;
+}
+
+.fa-trash{
+  color: white;
+  font-size: 2rem;
+}
+
+.card:last-child{
+  margin-bottom: 7rem;
+}
+
+.main-info{
+  display: flex; 
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+.rating, .phone-num{
+  color: white; 
+  font-size: 1rem;
+  padding: 0;
+}
+
+/* NO DATA IN DB INFO CARD */
+.user-info{
+  display: block;
+  width: 90%;
+  font-size: 4rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  line-height: 1.5;
+}
+
+.user-info > *{
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info > h1 > span{
+  font-size: 2.5rem;
+
 }
