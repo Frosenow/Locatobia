@@ -1,6 +1,6 @@
 
 const places = JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))
-
+const favPlaces = JSON.parse(window.localStorage.getItem('favPlaces'))
 
 // Scrap all categories of places nearby and format them  
 function defineCategories(){
@@ -16,16 +16,26 @@ function defineCategories(){
     return categories
 }
 
+function getDataBaseStatus(){
+    let placesStatus = []; 
+    if(window.localStorage.key('favPlaces')){
+        placesStatus = [...JSON.parse(window.localStorage.getItem('favPlaces'))]
+        return placesStatus
+    } else {
+        return placesStatus
+    }
+}
+
 // Create categories headers and html elements to render it on page dynamically
 function createHeaders(categories){
     const ulElement = document.getElementById('places-names')
 
     categories.forEach(category => {
         // Create main ul with category title 
-        ulHeaderElement = document.createElement('li')
+        const ulHeaderElement = document.createElement('li')
         ulHeaderElement.setAttribute('class', 'category-header')
         
-        ulSpanCategory = document.createElement('span')
+        const ulSpanCategory = document.createElement('span')
         ulSpanCategory.setAttribute('id', 'category-name')
         ulSpanCategory.innerText = String(category)
        
@@ -33,7 +43,7 @@ function createHeaders(categories){
         ulHeaderElement.appendChild(ulSpanCategory)
 
         // Create  dropdown ul for storing places 
-        ulDropdown = document.createElement('ul')
+        let ulDropdown = document.createElement('ul')
         ulDropdown.setAttribute('class', `dropdown ${category}`)
         ulHeaderElement.appendChild(ulDropdown)
 
@@ -41,19 +51,26 @@ function createHeaders(categories){
         const placesArr = appendPlaces(places, category)
 
         placesArr.forEach(place => {
+
             // Create Like icon 
-            aTag = document.createElement('a')
+            const aTag = document.createElement('a')
             aTag.setAttribute('href', '#/')
             aTag.setAttribute('class', 'like-btn')
-            aTag.innerHTML = '<i class="fa-regular fa-bookmark"></i>'
+
+             // Check if palce is in data base, and if true, change icon 
+            let iconType = 'fa-regular';
+            if(!isInDatabase(favPlaces, place)){
+                iconType = 'fa-solid'
+            }
+            aTag.innerHTML = `<i class="${iconType} fa-bookmark"></i>`
             aTag.id = place.place_id
             // Create lis with places 
-            liPlace = document.createElement('li')
+            const liPlace = document.createElement('li')
             
             // Append aTag with icon and span with place name
             liPlace.appendChild(aTag)
 
-            liSpan = document.createElement('span')
+            const liSpan = document.createElement('span')
             liSpan.innerText = place.name
             liPlace.appendChild(liSpan)
             liPlace.setAttribute('class', 'place-name')
@@ -91,7 +108,7 @@ function filterNames(){
     //Get all lis with places in category 
     const liNames = document.querySelectorAll('.dropdown li')
 
-    // Lopp through collection-item lis 
+    // Loop through collection-item lis 
     liNames.forEach(li => {
         //If matched 
         if(li.innerHTML.toUpperCase().indexOf(filterValue) > -1){
@@ -102,7 +119,7 @@ function filterNames(){
     })
 }
 
-likeBtns = document.querySelectorAll('.like-btn')
+const likeBtns = document.querySelectorAll('.like-btn')
 
 likeBtns.forEach(btn => btn.addEventListener('click', saveLocation))
 
@@ -117,26 +134,41 @@ function saveLocation(target){
 }
 
 function addToFavourites(target){
-    // Get ID of place 
-    places_id = target.currentTarget.id
+    // Get current items from "database"
+    const placesStatus = getDataBaseStatus()
 
-    // Find that place by ID and add to LocalStorage
-    places.forEach(place => {
-        if(place["place_id"] == places_id){
-            window.localStorage.setItem(place.name, JSON.stringify(place))
+    // Get ID of place 
+    const places_id = target.currentTarget.id
+
+    // Find that place by ID and add to LocalStorage if it isn't already 
+   places.forEach(place => {
+        if(place["place_id"] == places_id && placesStatus.every(elem => elem.place_id != places_id)){
+            placesStatus.push(place)
+            localStorage.setItem(`favPlaces`, JSON.stringify(placesStatus))
+            // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
+            location.reload()
         }
-            
     })
 }
 
 function removeFromFavourites(target){
+    const placesStatus = getDataBaseStatus()
     // Get ID of place
-    places_id = target.currentTarget.id 
+    const places_id = target.currentTarget.id 
     // Find that place by ID and remove from LocalStorage
     places.forEach(place => {
         if(place["place_id"] == places_id){
-            window.localStorage.removeItem(place.name)
-        }
-            
+            const baseUpdate = placesStatus.filter(placeInDB => placeInDB.place_id != places_id)
+            window.localStorage.setItem('favPlaces', JSON.stringify(baseUpdate))
+        }  
     })
+    location.reload()
+}
+
+
+function isInDatabase(Database, elem){
+    if(Database)
+        return Database.every(item => item.place_id !== elem.place_id)
+    else 
+        return false; 
 }
