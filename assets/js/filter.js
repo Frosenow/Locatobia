@@ -167,5 +167,8 @@ function removeFromFavourites(target){
 
 
 function isInDatabase(Database, elem){
-    return Database.every(item => item.place_id !== elem.place_id)
+    if(Database)
+        return Database.every(item => item.place_id !== elem.place_id)
+    else 
+        return false; 
 }
