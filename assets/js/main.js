@@ -70,12 +70,14 @@ function getPOI(position, radius){
 function callback(results, status, next_page_token){
     if(status == google.maps.places.PlacesServiceStatus.OK){
         window.sessionStorage.setItem('nearbyPlaces', JSON.stringify(results)) 
+        if(next_page_token){
+            service.nearbySearch({
+                location: coordinatesObj,
+                radius: 100,
+                pagetoken: next_page_token
+            }, callback)
+        }
     }else{
         console.log("PlaceService Error")
     }
-    // if(next_page_token.hasNextPage){
-        // const pageToken = next_page_token.C
-        // scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=initMap&pagetoken=${pageToken}`) 
-        // console.log(pageToken)
-    // }
 }
