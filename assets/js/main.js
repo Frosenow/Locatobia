@@ -3,16 +3,20 @@
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
+// Setting default radius
+let searchRadius = 10000;
 
 // Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
 const scriptAPI = document.createElement('script')
-scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=getLocation`)
+scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
 document.body.appendChild(scriptAPI)
 
-
 getLocation()
-// Clearing the sessionStorage to get current places
-window.sessionStorage.clear()
+
+function clearLocations(){
+    // Clearing the sessionStorage to get current places
+    window.sessionStorage.clear()
+}
 
 // Getting user location
 async function getLocation(){
@@ -27,14 +31,13 @@ async function getLocation(){
 
 // Setting user location on map if success
 async function successLocation(position){ 
-    console.log("INIT MAP")
     await new Promise((resolve) => {
         scriptAPI.onload = resolve
     })
 
     const userPosition = [position.coords.latitude, position.coords.longitude]
     initMap({lat: userPosition[0], lng: userPosition[1]})
-    getPOI(userPosition, 1000)
+    getPOI(userPosition, searchRadius)
 }
 
 // Setting default location using IPAPI API
@@ -44,7 +47,7 @@ function errorLocation(){
         .then(data => {
             const userPosition = [data.latitude, data.longitude]
             initMap({lat: userPosition[0], lng: userPosition[1]})
-            getPOI(userPosition, 1000)
+            getPOI(userPosition, searchRadius)
     })
     .catch(error => {
     console.error("IPAPI Error:", error);
@@ -77,14 +80,9 @@ function getPOI(position, radius){
 
 function callback(results, status, next_page_token){
     if(status == google.maps.places.PlacesServiceStatus.OK){
-        // addToFavourites(results)
-        window.sessionStorage.setItem('nearbyPlaces', JSON.stringify(results)) 
+        addToFavourites(results)
         if(next_page_token){
-            service.nearbySearch({
-                location: coordinatesObj,
-                radius: 1000,
-                pagetoken: next_page_token
-            }, callback)
+            next_page_token.nextPage()
         }
     }else{
         console.log("PlaceService Error")
@@ -104,7 +102,6 @@ function getDataBaseStatus(){
 function addToFavourites(places){
     // Get current items from "database"
     const placesStatus = getDataBaseStatus()
-    console.log(placesStatus)
     // Find that place by ID and add to SessionStorage if it isn't already 
    places.forEach(place => {
         if(placesStatus.every(elem => elem.place_id !== place["place_id"])){
