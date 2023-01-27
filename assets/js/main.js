@@ -2,19 +2,26 @@
 //THIS METHOD IS TEMPORARY, TO PROTECT API KEY 
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
-window.sessionStorage.clear()
+
+// Setting default radius
+let searchRadius = 10000;
 
 // Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
 const scriptAPI = document.createElement('script')
-scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=getLocation`)
+scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
 document.body.appendChild(scriptAPI)
 
-
 getLocation()
+
+function clearLocations(){
+    // Clearing the sessionStorage to get current places
+    window.sessionStorage.clear()
+}
+
 // Getting user location
-function getLocation(){
+async function getLocation(){
     if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+        navigator.geolocation.getCurrentPosition(await successLocation, errorLocation, {
             enableHighAccuracy: true, 
             timeout: 10000,
         })
@@ -24,9 +31,13 @@ function getLocation(){
 
 // Setting user location on map if success
 async function successLocation(position){ 
+    await new Promise((resolve) => {
+        scriptAPI.onload = resolve
+    })
+
     const userPosition = [position.coords.latitude, position.coords.longitude]
-    await initMap({lat: userPosition[0], lng: userPosition[1]})
-    getPOI(userPosition, 1000)
+    initMap({lat: userPosition[0], lng: userPosition[1]})
+    getPOI(userPosition, searchRadius)
 }
 
 // Setting default location using IPAPI API
@@ -36,7 +47,7 @@ function errorLocation(){
         .then(data => {
             const userPosition = [data.latitude, data.longitude]
             initMap({lat: userPosition[0], lng: userPosition[1]})
-            getPOI(userPosition, 1000)
+            getPOI(userPosition, searchRadius)
     })
     .catch(error => {
     console.error("IPAPI Error:", error);
@@ -53,7 +64,7 @@ function initMap(userPosition){
 
     const marker = new google.maps.Marker({
         position: userPosition,
-        map: map, 
+        map: map,
     })
 }
 
@@ -69,13 +80,9 @@ function getPOI(position, radius){
 
 function callback(results, status, next_page_token){
     if(status == google.maps.places.PlacesServiceStatus.OK){
-        window.sessionStorage.setItem('nearbyPlaces', JSON.stringify(results)) 
+        addToFavourites(results)
         if(next_page_token){
-            service.nearbySearch({
-                location: coordinatesObj,
-                radius: 100,
-                pagetoken: next_page_token
-            }, callback)
+            next_page_token.nextPage()
         }
     }else{
         console.log("PlaceService Error")
@@ -95,4 +102,48 @@ slider.oninput = function() {
   selectValue.innerHTML = this.value
   selector.style.left = this.value + '%'
   progressBar.style.width = this.value + '%'
+}
+
+function getDataBaseStatus(){
+    let placesStatus = []; 
+    if(window.sessionStorage.key('nearbyPlaces')){
+        placesStatus = [...JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))]
+        return placesStatus
+    } else {
+        return placesStatus
+    }
+}
+
+function addToFavourites(places){
+    // Get current items from "database"
+    const placesStatus = getDataBaseStatus()
+    // Find that place by ID and add to SessionStorage if it isn't already 
+   places.forEach(place => {
+        if(placesStatus.every(elem => elem.place_id !== place["place_id"])){
+            placesStatus.push(place)
+            sessionStorage.setItem(`nearbyPlaces`, JSON.stringify(placesStatus))
+        }
+    })
+}
+
+function getDataBaseStatus(){
+    let placesStatus = []; 
+    if(window.sessionStorage.key('nearbyPlaces')){
+        placesStatus = [...JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))]
+        return placesStatus
+    } else {
+        return placesStatus
+    }
+}
+
+function addToFavourites(places){
+    // Get current items from "database"
+    const placesStatus = getDataBaseStatus()
+    // Find that place by ID and add to SessionStorage if it isn't already 
+   places.forEach(place => {
+        if(placesStatus.every(elem => elem.place_id !== place["place_id"])){
+            placesStatus.push(place)
+            sessionStorage.setItem(`nearbyPlaces`, JSON.stringify(placesStatus))
+        }
+    })
 }
