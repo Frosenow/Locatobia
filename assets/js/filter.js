@@ -145,7 +145,6 @@ function addToFavourites(target){
         if(place["place_id"] == places_id && placesStatus.every(elem => elem.place_id != places_id)){
             placesStatus.push(place)
             localStorage.setItem(`favPlaces`, JSON.stringify(placesStatus))
-            // Ustawic to pozniej, gdy opracuje zmiane stylu dla elementow ktore sa w bazie
             location.reload()
         }
     })
