@@ -82,8 +82,8 @@ function callback(results, status, next_page_token){
     }
 }
 
-// RANGE SLIDER 
 
+// Range Slider
 let slider = document.getElementById('slider')
 let selector = document.getElementById('selector')
 let selectValue = document.getElementById('selectValue')
