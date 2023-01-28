@@ -86,7 +86,7 @@ body {overflow-x: hidden;}
 /*******************************************/
 
 #map{
-  height: 30vh;
+  height: 40vh;
   border-radius: 1.5rem;
   margin: 1rem 2rem;
 }
@@ -398,7 +398,7 @@ input[type=text]:focus {
 .selectBtn {
   height: 48px;
   width: 48px;
-  background-image: url(https://img.icons8.com/material-outlined/512/filled-circle--v2.png);
+  background-image: url('../images/circle-icon.png');
   background-size: cover;
   background-position: center;
   border-radius: 5%;
@@ -407,7 +407,7 @@ input[type=text]:focus {
 }
 
 #selectValue {
-  width: 48px;
+  width: 60px;
   height: 40px;
   position: absolute;
   top: 0;
@@ -422,8 +422,8 @@ input[type=text]:focus {
 #selectValue::after {
   content: '';
   border-top: 17px solid #fff;
-  border-left: 24px solid var(--orange-web);
-  border-right: 24px solid var(--orange-web);
+  border-left: 30px solid var(--orange-web);
+  border-right: 30px solid var(--orange-web);
   position: absolute;
   bottom: -14px;
   left: 0%;

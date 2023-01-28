@@ -1,5 +1,3 @@
-// TO AVOID "UNCAUGHT REFERENCE ERROR" API SCRIPT SHOULD BE LOADED BEFEROE MAIN JS SCRIPT (!)
-//THIS METHOD IS TEMPORARY, TO PROTECT API KEY 
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
@@ -77,16 +75,28 @@ function errorLocation(){
 
 // Generating map image and adding marker with user current location
 function initMap(userPosition){
+    // Create map element
     const mapDiv = document.getElementById("map")
     const map = new google.maps.Map(mapDiv, {
         zoom: 15, 
         center: userPosition,   
-    })
-
+    });
+    // Create marker in the place where user is located
     const marker = new google.maps.Marker({
         position: userPosition,
         map: map,
-    })
+    });
+    // Create circle with the user choosen radius
+    const cityCircle = new google.maps.Circle({
+        strokeColor: "#FCA311",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FCA311",
+        fillOpacity: 0.25,
+        map,
+        center: userPosition,
+        radius: Number(searchRadius), 
+    });
 }
 
 // Getting list of places within given location and radius 
@@ -99,6 +109,7 @@ function getPOI(position, radius){
         }, callback)
 }
 
+// Callback function to generate next results (places)
 function callback(results, status, next_page_token){
     if(status == google.maps.places.PlacesServiceStatus.OK){
         addToFavourites(results)
