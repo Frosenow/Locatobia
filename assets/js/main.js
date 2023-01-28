@@ -3,15 +3,39 @@
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
+window.addEventListener('load', getLocation)
+
+// Range Slider Elements
+const slider = document.getElementById('slider')
+const selector = document.getElementById('selector')
+const selectValue = document.getElementById('selectValue')
+const progressBar = document.getElementById('progressBar')
+
+// Set Default value 
+selectValue.innerHTML = slider.value
+
 // Setting default radius
-let searchRadius = 10000;
+let searchRadius = slider.value;
+
+slider.addEventListener('change', setRadius)
+
+function setRadius(){
+    searchRadius = this.value
+    clearLocations()
+    getLocation()
+}
+
+slider.oninput = function() {
+  selectValue.innerHTML = this.value 
+  selector.style.left = (this.value/slider.max)*100 + '%'
+  progressBar.style.width = (this.value/slider.max)*100 + '%'
+}
 
 // Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
 const scriptAPI = document.createElement('script')
 scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
 document.body.appendChild(scriptAPI)
 
-getLocation()
 
 function clearLocations(){
     // Clearing the sessionStorage to get current places
@@ -28,14 +52,9 @@ async function getLocation(){
     } 
 }
 
-
 // Setting user location on map if success
-async function successLocation(position){ 
-    await new Promise((resolve) => {
-        scriptAPI.onload = resolve
-    })
-
-    const userPosition = [position.coords.latitude, position.coords.longitude]
+async function successLocation(position){
+    const userPosition = [position.coords.latitude, position.coords.longitude] 
     initMap({lat: userPosition[0], lng: userPosition[1]})
     getPOI(userPosition, searchRadius)
 }
@@ -87,21 +106,6 @@ function callback(results, status, next_page_token){
     }else{
         console.log("PlaceService Error")
     }
-}
-
-
-// Range Slider
-let slider = document.getElementById('slider')
-let selector = document.getElementById('selector')
-let selectValue = document.getElementById('selectValue')
-let progressBar = document.getElementById('progressBar')
-
-selectValue.innerHTML = slider.value
-
-slider.oninput = function() {
-  selectValue.innerHTML = this.value
-  selector.style.left = this.value + '%'
-  progressBar.style.width = this.value + '%'
 }
 
 function getDataBaseStatus(){
