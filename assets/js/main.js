@@ -3,6 +3,7 @@
 // Setting up hidden API key
 const placesAPIKey = config.API_KEY;
 
+// Rendering the map after the page is open
 window.addEventListener('load', getLocation)
 
 // Range Slider Elements
@@ -19,26 +20,27 @@ let searchRadius = slider.value;
 
 slider.addEventListener('change', setRadius)
 
+// Geting radius value from slider and then looking for places nearby
 function setRadius(){
     searchRadius = this.value
     clearLocations()
     getLocation()
 }
 
+// Changes input value smoothly
 slider.oninput = function() {
   selectValue.innerHTML = this.value 
   selector.style.left = (this.value/slider.max)*100 + '%'
   progressBar.style.width = (this.value/slider.max)*100 + '%'
 }
 
-// Appendig script with GoogleMapAPI and Places Library to html DOM to prevent API key for leaking 
+// Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
 const scriptAPI = document.createElement('script')
 scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
 document.body.appendChild(scriptAPI)
 
-
+// Clearing the sessionStorage to get current places
 function clearLocations(){
-    // Clearing the sessionStorage to get current places
     window.sessionStorage.clear()
 }
 
@@ -108,6 +110,7 @@ function callback(results, status, next_page_token){
     }
 }
 
+// Getting all places (if there are any)
 function getDataBaseStatus(){
     let placesStatus = []; 
     if(window.sessionStorage.key('nearbyPlaces')){
@@ -118,28 +121,7 @@ function getDataBaseStatus(){
     }
 }
 
-function addToFavourites(places){
-    // Get current items from "database"
-    const placesStatus = getDataBaseStatus()
-    // Find that place by ID and add to SessionStorage if it isn't already 
-   places.forEach(place => {
-        if(placesStatus.every(elem => elem.place_id !== place["place_id"])){
-            placesStatus.push(place)
-            sessionStorage.setItem(`nearbyPlaces`, JSON.stringify(placesStatus))
-        }
-    })
-}
-
-function getDataBaseStatus(){
-    let placesStatus = []; 
-    if(window.sessionStorage.key('nearbyPlaces')){
-        placesStatus = [...JSON.parse(window.sessionStorage.getItem('nearbyPlaces'))]
-        return placesStatus
-    } else {
-        return placesStatus
-    }
-}
-
+// Method to update sessionStorage without deleting the files that are in specified key 
 function addToFavourites(places){
     // Get current items from "database"
     const placesStatus = getDataBaseStatus()
