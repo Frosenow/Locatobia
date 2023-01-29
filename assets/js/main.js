@@ -171,7 +171,7 @@ function getRandIdx(places){
 
 async function attachPlaces(result, amount){
     if(result){
-        const cardHolder = document.querySelector('.places-cards')
+        const cardHolder = document.querySelector('.like-places')
         for(let i = 0; i < amount.length; i++){
             const card = document.querySelector('template')
             .content
