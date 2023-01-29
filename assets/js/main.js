@@ -33,16 +33,22 @@ function clearLocations(){
     window.sessionStorage.clear()
 }
 
-// Getting user location
+// Getting user location and setting up API
 async function getLocation(){
-    // Setting up hidden API key
-    const placesAPIKey = config.API_KEY;
 
-    // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
-    const scriptAPI = document.createElement('script')
-    scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
-    document.body.appendChild(scriptAPI)    
+    // Avoid adding sciprt every time the function is invoked
+    if(!document.querySelector('.api-key')){
+        // Setting up hidden API key
+        const placesAPIKey = config.API_KEY;
 
+        // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
+        const scriptAPI = document.createElement('script')
+        scriptAPI.setAttribute('class', 'api-key')
+        scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
+        document.body.appendChild(scriptAPI)    
+    }
+    
+    // Get user location
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(await successLocation, errorLocation, {
             enableHighAccuracy: true, 
@@ -108,6 +114,8 @@ function getPOI(position, radius){
         }, callback)
 }
 
+// Set flag to get only first 20 results 
+let recivedResults = true; 
 
 // Callback function to generate next results (places)
 function callback(results, status, next_page_token){
@@ -116,14 +124,69 @@ function callback(results, status, next_page_token){
         if(next_page_token){
             next_page_token.nextPage()
         }
+
+        // Get only the results with images
+        const imgArr = []; 
         results.forEach(result => {
-                if(result.photos){
-                    console.log(result.photos[0].getUrl())
+                if(result.photos && recivedResults){
+                    imgArr.push(result)
                 }
             })
+        
+        if(recivedResults){
+            getRandIdx(imgArr)
+        }
+            recivedResults = false; 
     }else{
         console.log("PlaceService Error")
     }
+}
+
+
+// Get random placs to display them on a page 
+function getRandIdx(places){
+    if(places.length > 2){
+        const randNums = []; 
+        // Get 3 random places with image
+        for(let i = 0; i < 3; i++){
+            // Get random index of array of places
+            let randIdx = Math.round(Math.random()*(places.length - 1));
+            // Look for duplicates 
+            if(randNums.includes(randIdx)){
+                while(!randNums.includes(randIdx)){
+                    randIdx = Math.round(Math.random()*5);
+                }
+                randNums.push(randIdx)
+            } else {
+                randNums.push(randIdx)
+            }
+        }
+        attachPlaces(places, randNums)
+    }else{
+        attachPlaces(null, _)
+        alert('No places found')
+    }
+    
+}
+
+async function attachPlaces(result, amount){
+    if(result){
+        const cardHolder = document.querySelector('.places-cards')
+        for(let i = 0; i < amount.length; i++){
+            const card = document.querySelector('template')
+            .content
+            .cloneNode(true)
+
+            let cardElement = await setInformations(card, result[amount[i]])
+            cardHolder.appendChild(cardElement)
+        }
+    }
+}
+
+function setInformations(cardNode, element){
+    cardNode.querySelector('.name').innerText = element.name
+    cardNode.querySelector('.source-image').src = element.photos[0].getUrl()
+    return cardNode
 }
 
 // Getting all places (if there are any)
