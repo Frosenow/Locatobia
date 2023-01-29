@@ -28,8 +28,6 @@ function setRadius(){
 // Changes input value smoothly
 slider.oninput = function() {
   selectValue.innerHTML = this.value 
-  selector.style.left = (this.value/slider.max)*100 + '%'
-  progressBar.style.width = (this.value/slider.max)*100 + '%'
 }
 
 // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
@@ -78,7 +76,7 @@ function initMap(userPosition){
     // Create map element
     const mapDiv = document.getElementById("map")
     const map = new google.maps.Map(mapDiv, {
-        zoom: 15, 
+        zoom: 14, 
         center: userPosition,   
     });
     // Create marker in the place where user is located
