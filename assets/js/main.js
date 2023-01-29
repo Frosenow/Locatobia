@@ -1,6 +1,3 @@
-// Setting up hidden API key
-const placesAPIKey = config.API_KEY;
-
 // Rendering the map after the page is open
 window.addEventListener('load', getLocation)
 
@@ -30,10 +27,6 @@ slider.oninput = function() {
   selectValue.innerHTML = this.value 
 }
 
-// Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
-const scriptAPI = document.createElement('script')
-scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
-document.body.appendChild(scriptAPI)
 
 // Clearing the sessionStorage to get current places
 function clearLocations(){
@@ -42,12 +35,20 @@ function clearLocations(){
 
 // Getting user location
 async function getLocation(){
+    // Setting up hidden API key
+    const placesAPIKey = config.API_KEY;
+
+    // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
+    const scriptAPI = document.createElement('script')
+    scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
+    document.body.appendChild(scriptAPI)    
+
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(await successLocation, errorLocation, {
             enableHighAccuracy: true, 
             timeout: 10000,
         })
-    } 
+    }
 }
 
 // Setting user location on map if success
@@ -107,6 +108,7 @@ function getPOI(position, radius){
         }, callback)
 }
 
+
 // Callback function to generate next results (places)
 function callback(results, status, next_page_token){
     if(status == google.maps.places.PlacesServiceStatus.OK){
@@ -114,6 +116,11 @@ function callback(results, status, next_page_token){
         if(next_page_token){
             next_page_token.nextPage()
         }
+        results.forEach(result => {
+                if(result.photos){
+                    console.log(result.photos[0].getUrl())
+                }
+            })
     }else{
         console.log("PlaceService Error")
     }

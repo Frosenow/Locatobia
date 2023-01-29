@@ -28,7 +28,6 @@ async function getPlacesDetails() {
       });
       placesDetails.push(placeDetail);
     }
-  
     await attachPlaces(favPlaces, placesDetails);
   }
 
