@@ -35,26 +35,34 @@ function clearLocations(){
 
 // Getting user location and setting up API
 async function getLocation(){
+    try{
+            // Avoid adding sciprt every time the function is invoked
+            if(!document.querySelector('.api-key')){
+                await new Promise((resolve, reject) => {
+                    // Setting up hidden API key
+                     const placesAPIKey = config.API_KEY;
 
-    // Avoid adding sciprt every time the function is invoked
-    if(!document.querySelector('.api-key')){
-        // Setting up hidden API key
-        const placesAPIKey = config.API_KEY;
-
-        // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
-        const scriptAPI = document.createElement('script')
-        scriptAPI.setAttribute('class', 'api-key')
-        scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
-        document.body.appendChild(scriptAPI)    
-    }
-    
+                    // Appendig script with GoogleMapAPI and Places Library to HTML DOM to prevent API key for leaking 
+                    const scriptAPI = document.createElement('script')
+                    scriptAPI.setAttribute('class', 'api-key')
+                    scriptAPI.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${placesAPIKey}&v=weekly&libraries=places&callback=clearLocations`)
+                    scriptAPI.defer = true;
+                    scriptAPI.onload = resolve;
+                    scriptAPI.onerror = reject; 
+                    document.body.appendChild(scriptAPI)   
+                }) 
+            }
     // Get user location
     if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(await successLocation, errorLocation, {
+        navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
             enableHighAccuracy: true, 
             timeout: 10000,
         })
     }
+    } catch(error){
+        console.log('Faield to load Google Maps API: ', error)
+    }
+    
 }
 
 // Setting user location on map if success
