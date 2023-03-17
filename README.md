@@ -1,5 +1,5 @@
 #  Locatobia 
-Locatobia is a web application that uses the Google Maps API and JavaScript geolocation API to provide sightseeing recommendations to tourists who are short on time. The application takes into account the user's location and tries to find to suggest the most popular and relevant tourist attractions in the area. Tourists have the ability to filter tourist attractions by categories and also save them to favorites using Local Storage.
+Locatobia is a web application that uses the Google Maps API and JavaScript geolocation API to provide sightseeing recommendations to tourists who are short on time. The application takes into account the user's location and tries to suggest the most popular and relevant tourist attractions in the area. Tourists have the ability to filter tourist attractions by categories and also save them as well as delete them from favourites list. 
 
 **Link to project:** [Locatobia Demo](https://cozy-gnome-77b50e.netlify.app/)
 
@@ -22,7 +22,7 @@ Locatobia is a web application that uses HTML, CSS, and JavaScript for the clien
 
 The front-end of the application is built using HTML and CSS to create the layout and styling of the web pages. The Locatobia web application has a responsive design that is optimized for mobile devices, with the primary goal of providing a mobile application-like experience. The application has been designed to work seamlessly on mobile phones, with a layout that is easy to navigate using touch-based input.
 
-The UI is minimalist in style, with a focus on providing a clean and simple user interface that allows the user to quickly find nearby tourist attractions and restaurants. The use of card-based interfaces for displaying information about the attractions and restaurants gives the application a mobile application-like feel.The JavaScript code is responsible for handling user interaction and updating the page dynamically. 
+The UI is minimalist in style, with a focus on providing a clean and simple user interface that allows the user to quickly find nearby tourist attractions and restaurants. The use of card-based interfaces for displaying information about the attractions and restaurants also gives the application a mobile application-like feel.The JavaScript code is responsible for handling user interaction and updating the page dynamically. 
 
 The Locatobia web application integrates with the Google Maps API and geolocation API to provide information about nearby tourist attractions and restaurants. The Google Maps API is used to display the location of the tourist attractions and restaurants on a map, while the geolocation API is used to determine the user's current location.
 
