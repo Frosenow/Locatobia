@@ -1,7 +1,7 @@
 #  Locatobia 
 Locatobia is a web application that uses the Google Maps API and JavaScript geolocation API to provide sightseeing recommendations to tourists who are short on time. The application takes into account the user's location and tries to suggest the most popular and relevant tourist attractions in the area. Tourists have the ability to filter tourist attractions by categories and also save them as well as delete them from favourites list. 
 
-**Link to project:** [Locatobia Demo](https://cozy-gnome-77b50e.netlify.app/)
+**Link to project:** [Locatobia Demo](https://willowy-lamington-2fec94.netlify.app/)
 
 ![Mockup of the site](./assets/images/mockup.jpg)
 
